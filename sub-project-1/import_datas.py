@@ -1,49 +1,27 @@
 def get_dictionnaries():
-    import os
-    import xmltodict as xtd
-
-    from elasticsearch import Elasticsearch
-    from elasticsearch.helpers import bulk
-    es = Elasticsearch("https://tdelastic:9200", verify_certs=False, request_timeout=1000000)
-
-    directory = "TRAIN_ENSIBS"
-    dictionnaries = []
-
-    print("Indexing files...")
-
-    for filename in os.listdir(directory):
-        file = os.path.join(directory, filename)
-        if os.path.isfile(file):
-            print("╰─ " + file)
-            with open(file, 'r') as f:
-                dictionnaries.append(xtd.parse(f.read()))
-                file_name = file.replace(directory + "/", "")
-                es.index(index=file_name, id=len(dictionnaries), document=dictionnaries[-1])
-    
-    return dictionnaries
-
-
-
-def get_dictionnaries2():
+    # Imports
     import os
     from dotenv import load_dotenv
     from elasticsearch import Elasticsearch
     from elasticsearch.helpers import bulk
     from lxml import etree as ET
 
-    # Create ElasticSearch object
+    # Load environment variables
     load_dotenv()
     LOGIN = os.getenv("LOGIN")
     PASSWORD = os.getenv("PASSWORD")
-    es = Elasticsearch("https://tdelastic:9200", verify_certs=False, request_timeout=1000000, http_auth=(LOGIN, PASSWORD))
+
+    # Create ElasticSearch object
+    es = Elasticsearch("https://tdelastic:9200", verify_certs=False, request_timeout=1000000, basic_auth=(LOGIN, PASSWORD))
 
     directory = "TRAIN_ENSIBS"
     dictionnaries = []
 
-    # Pour chaque fichier XML du dossier
     print("[+] Indexing file")
+    
+    # Foreach files in "TRAIN_ENSIBS" directory
     for filename in os.listdir(directory):
-        file = os.path.join(directory, filename)
+        # Filter to check only XML files
         if filename.endswith(".xml"):
             print(" ╰─ " + filename)
             file_path = os.path.join(directory, filename)
@@ -76,20 +54,14 @@ def get_dictionnaries2():
                     '_source': flow
                 })
 
+    # Send datas to ElasticSearch
     success, failed = bulk(es, dictionnaries, index="ia-detection-intrusion")
-    print("[+] Success: " + str(success))
-    print("[-] Failed: " + str(failed))
-    return dictionnaries
+    return success, failed, dictionnaries
 
 
 if __name__ == "__main__":
-    dictionnaries = get_dictionnaries2()
-
-    # Understand data's structure
-    # The files are stored in a list called 'dictionnaries'
-    # Each file is then stored in a dictionnary
-    # The datas we want to access are all stored in the last key of dictionnaries[n]['dataroot'] 
-    # This last key contains a list of dictionnaries of every flows
-    # If you want to access 'appName', 'totalSourceBytes', etc. you'll have to do something like this:
-    # dictionnaries[0]['dataroot']['TestbedMonJun14Flows'][0]['appName']
-
+    success, failed, dictionnaries = get_dictionnaries()
+    print("[+] Success")
+    print(" ╰─ " + str(success))
+    print("[-] Failed")
+    print(" ╰─ " + str(failed))
