@@ -25,6 +25,6 @@ The file `import_data.py` must not be launched. It is used to import data from `
 
 ## Explaination
 
-### `import_data.py`
+### [`import_data.py`](./import_datas.py)
 
 This file is used to import data from `.xml` files to ElasticSearch. The function `get_dictionnaries` uses `lxml` lib to extract information from the `.xml` files to put them in a dictionnary before importing it to ElasticSearch.
