@@ -287,6 +287,104 @@ def get_avg_payload_by_app_name(es, index_name, appName):
     return avr_source_payload_size, avr_destination_payload_size
 
 
+def get_total_bytes_by_app_name(es, index_name):
+    """
+    Récupère le total de "totalDestinationBytes" et "totalSourceBytes" par appName.
+
+    :param es: Instance de connexion Elasticsearch.
+    :param index_name: Nom de l'index Elasticsearch contenant les données de logs.
+    :return: Un dictionnaire où les clés sont les applications et les valeurs sont les totaux de "totalDestinationBytes" et "totalSourceBytes".
+    """
+    query = {
+        "size": 0,
+        "aggs": {
+            "protocols": {
+                "terms": {
+                    "field": "appName.keyword",
+                    "size": 10000  # Le nombre maximum de appName distincts
+                },
+                "aggs": {
+                    "total_destination_bytes": {
+                        "sum": {
+                            "field": "totalDestinationBytes"
+                        }
+                    },
+                    "total_source_bytes": {
+                        "sum": {
+                            "field": "totalSourceBytes"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    result = es.search(index=index_name, body=query)
+
+    total_bytes_by_protocol = {}
+    protocol_buckets = result.get("aggregations", {}).get("protocols", {}).get("buckets", [])
+
+    for bucket in protocol_buckets:
+        protocol_name = bucket.get("key", "N/A")
+        total_destination_bytes = bucket.get("total_destination_bytes", {}).get("value", 0)
+        total_source_bytes = bucket.get("total_source_bytes", {}).get("value", 0)
+        total_bytes_by_protocol[protocol_name] = {
+            "totalDestinationBytes": total_destination_bytes,
+            "totalSourceBytes": total_source_bytes
+        }
+
+    return total_bytes_by_protocol
+
+
+def get_total_packets_by_app_name(es, index_name):
+    """
+    Récupère le total de "totalDestinationPackets" et "totalSourcePackets" par appName.
+
+    :param es: Instance de connexion Elasticsearch.
+    :param index_name: Nom de l'index Elasticsearch contenant les données de logs.
+    :return: Un dictionnaire où les clés sont les applications et les valeurs sont les totaux de "totalDestinationPackets" et "totalSourcePackets".
+    """
+    query = {
+        "size": 0,
+        "aggs": {
+            "protocols": {
+                "terms": {
+                    "field": "appName.keyword",
+                    "size": 10000  # Le nombre maximum d'applications distinct
+                },
+                "aggs": {
+                    "total_destination_packets": {
+                        "sum": {
+                            "field": "totalDestinationPackets"
+                        }
+                    },
+                    "total_source_packets": {
+                        "sum": {
+                            "field": "totalSourcePackets"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    result = es.search(index=index_name, body=query)
+
+    total_packets_by_protocol = {}
+    protocol_buckets = result.get("aggregations", {}).get("protocols", {}).get("buckets", [])
+
+    for bucket in protocol_buckets:
+        protocol_name = bucket.get("key", "N/A")
+        total_destination_packets = bucket.get("total_destination_packets", {}).get("value", 0)
+        total_source_packets = bucket.get("total_source_packets", {}).get("value", 0)
+        total_packets_by_protocol[protocol_name] = {
+            "totalDestinationPackets": total_destination_packets,
+            "totalSourcePackets": total_source_packets
+        }
+
+    return total_packets_by_protocol
+
+
 if __name__ == '__main__':
     # Load environment variables
     load_dotenv()
@@ -297,7 +395,7 @@ if __name__ == '__main__':
                        basic_auth=(LOGIN, PASSWORD))
 
     # Spécifiez l'index Elasticsearch contenant vos données de logs
-    index_name = "ia-detection-intrusion"
+    index_name = os.getenv("INDEX_NAME")
 
     # 1 - Récupérez la liste distincte des protocoles ##################################################################
     print(" 1 - Récupérez la liste distincte des protocoles")
@@ -390,10 +488,36 @@ if __name__ == '__main__':
     # print(f"Nombre d'entrées pour l'application '{app_name_to_search}': {entries_count}")
 
     # 10 - Récupérez la taille moyenne des "destinationPayloadAsBase64" et "sourcePayloadAsBase64" pour chaque "appName"
-    print(
-        "10 - Récupérez la taille moyenne des \"destinationPayloadAsBase64\" et \"sourcePayloadAsBase64\" pour chaque "
-        "\"appName\"")
-    avr_source_payload_size, avr_destination_payload_size = get_avg_payload_by_app_name(es, index_name,
-                                                                                        "WindowsFileSharing")
-    print("Average source payload size: {}".format(avr_source_payload_size))
-    print("Average destination payload size: {}".format(avr_destination_payload_size))
+    # print(
+    #     "10 - Récupérez la taille moyenne des \"destinationPayloadAsBase64\" et \"sourcePayloadAsBase64\" pour chaque "
+    #     "\"appName\"")
+    # avr_source_payload_size, avr_destination_payload_size = get_avg_payload_by_app_name(es, index_name,
+    #                                                                                     "WindowsFileSharing")
+    # print("Average source payload size: {}".format(avr_source_payload_size))
+    # print("Average destination payload size: {}".format(avr_destination_payload_size))
+
+    # 11 - Récupérez le total de "totalDestinationBytes" et "totalSourceBytes" par appName ##############################
+    print("11 - Récupérez le total de \"totalDestinationBytes\" et \"totalSourceBytes\" par appName")
+    total_bytes_by_app_name = get_total_bytes_by_app_name(es, index_name)
+
+    if total_bytes_by_app_name:
+        for app_name, data in total_bytes_by_app_name.items():
+            print(f"Application: {app_name}")
+            print(f"Total de Destination Bytes: {data['totalDestinationBytes']}")
+            print(f"Total de Source Bytes: {data['totalSourceBytes']}")
+            print()
+    else:
+        print("Aucune donnée trouvée.")
+
+    # 12 - Récupérez le total de "totalDestinationPackets" et "totalSourcePackets" par appName ##########################
+    print("12 - Récupérez le total de \"totalDestinationPackets\" et \"totalSourcePackets\" par appName")
+    total_packets_by_app_name = get_total_packets_by_app_name(es, index_name)
+
+    if total_packets_by_app_name:
+        for app_name, data in total_packets_by_app_name.items():
+            print(f"Application: {app_name}")
+            print(f"Total de Destination Packets: {data['totalDestinationPackets']}")
+            print(f"Total de Source Packets: {data['totalSourcePackets']}")
+            print()
+    else:
+        print("Aucune donnée trouvée.")
