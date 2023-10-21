@@ -5,35 +5,29 @@ from elasticsearch import Elasticsearch
 from matplotlib import pyplot as plt
 
 
-def get_all_packet_data(es, index_name):
-    """
-    Récupère toutes les données du nombre de paquets de destination et de source pour chaque entrée.
+def get_flow_par_packet_table(es, index_name):
+    # Get the number of occurence of each packet number (the packet number is the sum of the "totalDestinationPackets"
+    # and "totalSourcePackets" fields)
 
-    :param es: Instance de connexion Elasticsearch.
-    :param index_name: Nom de l'index Elasticsearch contenant les données de logs.
-    :return: Une liste de tuples, chaque tuple contenant le nombre de paquets de destination et de source.
-    """
-    packet_data = []
-    page_size = 10000  # Taille de chaque page
-    scroll_time = "1m"  # Durée de conservation de la recherche de défilement (1 minute)
-
+    # Create a query to get the number of occurence of each packet number
     query = {
-        "size": page_size,
+        "size": 0,
+        "aggs": {
+            "packet_number": {
+                "terms": {
+                    "script": {
+                        "source": "doc['totalDestinationPackets'].value + doc['totalSourcePackets'].value",
+                        "lang": "painless"
+                    },
+                    "size": 10000
+                }
+            }
+        }
     }
 
-    result = es.search(index=index_name, body=query, scroll=scroll_time)
-    scroll_id = result.get("_scroll_id")
-    total_hits = result.get("hits", {}).get("total", {}).get("value", 0)
-    hits = result.get("hits", {}).get("hits", [])
-
-    packet_data.extend(hits)
-
-    while len(packet_data) < total_hits:
-        result = es.scroll(scroll_id=scroll_id, scroll=scroll_time)
-        hits = result.get("hits", {}).get("hits", [])
-        packet_data.extend(hits)
-
-    return packet_data
+    # Execute the query
+    res = es.search(index=index_name, body=query)
+    return res
 
 
 # Exemple d'utilisation
@@ -50,33 +44,36 @@ if __name__ == "__main__":
     index_name = os.getenv("INDEX_NAME")
 
     print("[+] Getting all packet data")
-    packet_data = get_all_packet_data(es, index_name)
+    packet_data = get_flow_par_packet_table(es, index_name).get("aggregations", {}).get("packet_number", {}).get(
+        "buckets", {})
+    print("[+] Done")
 
-    # Extraire les données de paquets de destination et source
+    # Create a list of packet number and a list of occurence
     packet_number = []
-    for element in packet_data:
-        source_packets = element.get("_source", {}).get("totalSourcePackets")
-        destination_packets = element.get("_source", {}).get("totalDestinationPackets")
-        # average number of packets
-        avg_packets = (source_packets + destination_packets) / 2
-        packet_number.append(avg_packets)
+    occurence = []
+    for packet in packet_data:
+        packet_number.append(packet.get("key"))
+        occurence.append(packet.get("doc_count"))
 
-    # Get the highest number of packets
-    max_packets = max(packet_number)
-
-    # Create a dictionary with the number of packets as key and the number of occurences as value
-    packet_number_dict = {}
-    for i in range(0, int(max_packets)):
-        packet_number_dict[i] = 0
-
-    for packet in packet_number:
-        packet_number_dict[int(packet)] += 1
-
-    # create an histogram with the number of packets as x-axis and the number of occurences as y-axis
-    plt.figure(figsize=(10, 6))
-    plt.bar(packet_number_dict.keys(), packet_number_dict.values(), color='g')
-    plt.title("Histogramme du Nombre de Paquets")
-    plt.xlabel("Nombre de Paquets")
-    plt.ylabel("Nombre d'Occurences")
-    plt.grid(True)
+    # Plot histogram of the number of occurence of each packet number
+    # limit the y axis to the highest number of occurence
+    plt.bar(packet_number, occurence)
+    plt.ylim(0, max(occurence))
+    plt.xlabel("Packet number")
+    plt.ylabel("Occurence")
+    plt.title("Number of occurence of each packet number")
     plt.show()
+
+    # Plot histogram of the number of occurence of each packet number (log scale)
+    plt.bar(packet_number, occurence)
+    plt.xlabel("Packet number")
+    plt.ylabel("Occurence")
+    plt.title("Number of occurence of each packet number (log scale)")
+    plt.yscale("log")
+    plt.show()
+
+    # Statistics
+    print("Statistics:")
+    print("Number of packet number: {}".format(len(packet_number)))
+    print("Max number of occurence: {}".format(max(occurence)))
+    print("Min number of occurence: {}".format(min(occurence)))
