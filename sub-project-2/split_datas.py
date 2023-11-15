@@ -24,9 +24,22 @@ def split_datas(dictionnaries):
         df_split = np.array_split(df, 5)
         dictionnariesByAppNameSplitted[appName] = df_split
     
-    print("[+] Success")
+    print("\n[+] Success")
     print(" ╰─ " + "Dicts splitted into 5 parts")
+
+
+# Serialize the dictionnaries using pickle to save some time
+def serialize(dictionnaries):
+    import pickle
+    
+    with open('dictionnariesByAppNameSplitted.pickle', 'wb') as handle:
+        pickle.dump(dictionnaries, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+    print("\n[+] Success")
+    print(" ╰─ " + "The dictionnaries has been serialized")
+
 
 if __name__ == "__main__":
     dictionnaries = get_dictionnaries()
     split_datas(dictionnaries)
+    serialize(dictionnaries)
