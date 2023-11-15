@@ -16,7 +16,7 @@ def split_datas(dictionnaries):
         for dictionnary in dictionnaries:
             source = dictionnary["_source"]
             if source["appName"] == appName:
-                dictionnariesByAppName[appName].append(dictionnary)
+                dictionnariesByAppName[appName].append(source)
 
     # Split each dictionary into 5 parts S1, S2, S3, S4, S5 using pandas
     dictionnariesByAppNameSplitted = {}
