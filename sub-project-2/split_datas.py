@@ -22,6 +22,10 @@ def split_datas(dictionnaries):
     dictionnariesByAppNameSplitted = {}
     for appName in appNames:
         df = pd.DataFrame(dictionnariesByAppName[appName])
+        
+        # Shuffle the dataframe
+        df.sample(frac = 1)
+        
         df_split = np.array_split(df, 5)
         dictionnariesByAppNameSplitted[appName] = df_split
     
