@@ -32,6 +32,8 @@ def split_datas(dictionnaries):
     print("\n[+] Success")
     print(" ╰─ " + "Dicts splitted into 5 parts")
 
+    return dictionnariesByAppNameSplitted
+
 
 # Serialize the dictionnaries using pickle to save some time
 def serialize(dictionnaries):
@@ -49,5 +51,5 @@ def get_pickle_file():
 
 if __name__ == "__main__":
     dictionnaries = get_dictionnaries()
-    split_datas(dictionnaries)
-    serialize(dictionnaries)
+    dictionnariesByAppNameSplitted = split_datas(dictionnaries)
+    serialize(dictionnariesByAppNameSplitted)
