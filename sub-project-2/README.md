@@ -17,6 +17,10 @@ Create a folder called `TRAIN_ENSIBS` and put every `.xml` files required for th
 
 You can now execute every python while by using the command `python3 <file.py>`.
 
+## Disclamer
+
+This projet is suppose to get the datas pushed to ELK in [sub-project-1](../sub-project-1/README.md) but to gain some time *(because of the horrible bandwidth of our school)* we decided to serialize the datas in a pickle file.
+
 ## First data loading
 
 You can use the file `split_data.py` to load the data from the `.xml` files and split them depending on appName.
