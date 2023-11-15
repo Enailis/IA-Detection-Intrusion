@@ -1,3 +1,4 @@
 lxml
 pandas
+numpy
 scikit-learn
