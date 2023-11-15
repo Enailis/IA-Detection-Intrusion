@@ -1,3 +1,4 @@
+import pickle
 import pandas as pd
 import numpy as np
 from import_datas import get_dictionnaries
@@ -30,13 +31,16 @@ def split_datas(dictionnaries):
 
 # Serialize the dictionnaries using pickle to save some time
 def serialize(dictionnaries):
-    import pickle
-    
     with open('dictionnariesByAppNameSplitted.pickle', 'wb') as handle:
         pickle.dump(dictionnaries, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     print("\n[+] Success")
     print(" ╰─ " + "The dictionnaries has been serialized")
+
+
+def get_pickle_file():
+    with open('dictionnariesByAppNameSplitted.pickle', 'rb') as handle:
+        return pickle.load(handle)
 
 
 if __name__ == "__main__":

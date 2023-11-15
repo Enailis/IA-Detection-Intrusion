@@ -1,4 +1,5 @@
 lxml
 pandas
 numpy
+pickle
 scikit-learn
