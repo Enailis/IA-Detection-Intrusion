@@ -6,12 +6,16 @@ from sklearn.metrics import accuracy_score
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.neighbors import KNeighborsClassifier
+import statistics
 
+
+print("[+] Please wait, this may take a while...")
 
 datas = get_pickle_file()
 
 accuracy_scores = {}
 for appName in datas:
+    print(" ╰─ Analyzing " + appName + "...")
     accuracy_scores[appName] = []
     for i in range(0, len(datas[appName])):
         copy = datas[appName].copy()
@@ -45,21 +49,18 @@ for appName in datas:
         knn_model = KNeighborsClassifier(n_neighbors=3)
 
         # Train model
-        print("training...")
         knn_model.fit(X_train_imputed, y_train_encoded)
 
         # Predict using test datas
-        print("predicting...")
         predictions = knn_model.predict(X_test_imputed)
 
         # Calculate accuracy
         accuracy = accuracy_score(y_test_encoded, predictions)
         accuracy = accuracy * 100
         accuracy_scores[appName].append(accuracy)
-        print(f"Accuracy for {appName} number {i} : {accuracy}")
-    print("---------------------------------")
 
-print("Accuracy scores :")
+print("\nAccuracy scores :")
 for appName in accuracy_scores:
-    print(f"{appName} : {np.mean(accuracy_scores[appName])}")
-    
+    print("[+] " + appName)
+    print(" ╰─ Mean : " + str(np.mean(accuracy_scores[appName])))
+    print(" ╰─ Median : " + str(statistics.median(accuracy_scores[appName])))
