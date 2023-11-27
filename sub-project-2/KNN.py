@@ -2,14 +2,17 @@
 from split_datas import get_pickle_file
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
+from sklearn.metrics import accuracy_score
+from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.neighbors import KNeighborsClassifier
 
 
 datas = get_pickle_file()
 
+accuracy_scores = {}
 for appName in datas:
+    accuracy_scores[appName] = []
     for i in range(0, len(datas[appName])):
         copy = datas[appName].copy()
 
@@ -29,22 +32,34 @@ for appName in datas:
         # Encode strings into numerical values
         label_encoder = LabelEncoder()
         X_train_encoded = X_train.apply(label_encoder.fit_transform)
-        y_train_encoded = X_train.apply(label_encoder.fit_transform)
+        y_train_encoded = label_encoder.fit_transform(y_train)
         X_test_encoded  = X_test.apply(label_encoder.fit_transform)
         y_test_encoded  = label_encoder.fit_transform(y_test)
+
+        # Utilise un imputeur pour remplacer les NaN par la moyenne des colonnes
+        imputer = SimpleImputer(strategy='mean')
+        X_train_imputed = imputer.fit_transform(X_train_encoded)
+        X_test_imputed = imputer.transform(X_test_encoded)
 
         # Init KNN
         knn_model = KNeighborsClassifier(n_neighbors=3)
 
-        print("training...")
         # Train model
-        knn_model.fit(X_train_encoded, y_train_encoded)
+        print("training...")
+        knn_model.fit(X_train_imputed, y_train_encoded)
 
-        print("predicting...")
         # Predict using test datas
-        predictions = knn_model.predict(X_test_encoded)
+        print("predicting...")
+        predictions = knn_model.predict(X_test_imputed)
 
         # Calculate accuracy
-        accuracy = np.mean(predictions == y_test)
+        accuracy = accuracy_score(y_test_encoded, predictions)
+        accuracy = accuracy * 100
+        accuracy_scores[appName].append(accuracy)
         print(f"Accuracy for {appName} number {i} : {accuracy}")
     print("---------------------------------")
+
+print("Accuracy scores :")
+for appName in accuracy_scores:
+    print(f"{appName} : {np.mean(accuracy_scores[appName])}")
+    

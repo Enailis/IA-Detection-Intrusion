@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from import_datas import get_dictionnaries
 
+
 def split_datas(dictionnaries):
 
     print("[+] Splitting datas")
@@ -24,7 +25,7 @@ def split_datas(dictionnaries):
         df = pd.DataFrame(dictionnariesByAppName[appName])
         
         # Shuffle the dataframe
-        df.sample(frac = 1)
+        df = df.sample(frac = 1)
         
         df_split = np.array_split(df, 5)
         dictionnariesByAppNameSplitted[appName] = df_split
