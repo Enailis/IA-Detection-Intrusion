@@ -3,6 +3,9 @@ from split_datas import get_pickle_file
 import numpy as np
 import pandas as pd
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import precision_score
+from sklearn.metrics import roc_auc_score
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.neighbors import KNeighborsClassifier
@@ -14,9 +17,13 @@ print("[+] Please wait, this may take a while...")
 datas = get_pickle_file()
 
 accuracy_scores = {}
+precision_scores = {}
+roc_auc_scores = {}
 for appName in datas:
     print(" ╰─ Analyzing " + appName + "...")
     accuracy_scores[appName] = []
+    precision_scores[appName] = []
+    roc_auc_scores[appName] = []
     for i in range(0, len(datas[appName])):
         copy = datas[appName].copy()
 
@@ -59,8 +66,16 @@ for appName in datas:
         accuracy = accuracy * 100
         accuracy_scores[appName].append(accuracy)
 
-print("\nAccuracy scores :")
+        precision = precision_score(y_test_encoded, predictions, average=None)
+        precision_scores[appName].append(precision)
+
+        roc_auc = roc_auc_score(y_test_encoded, predictions)
+        roc_auc_scores[appName].append(roc_auc)
+
+print("\nResults :")
 for appName in accuracy_scores:
     print("[+] " + appName)
-    print(" ╰─ Mean : " + str(np.mean(accuracy_scores[appName])))
-    print(" ╰─ Median : " + str(statistics.median(accuracy_scores[appName])))
+    print(" ╰─ Mean Accuracy: " + str(np.mean(accuracy_scores[appName])))
+    print(" ╰─ Median Accuracy : " + str(statistics.median(accuracy_scores[appName])))
+    print(" ╰─ Mean Precision : " + str(np.mean(precision_scores[appName])))
+    print(" ╰─ Mean ROC AUC : " + str(np.mean(roc_auc_scores[appName])))
