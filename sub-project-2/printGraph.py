@@ -43,11 +43,11 @@ for classifier in data.keys():
 print(AUC_scores)
 
 
-plt.figure(figsize=(10, 10))
+plt.figure(figsize=(10, 11))
 plt.title("Mean AUC scores for each classifier")
 plt.xlabel("Classifier")
 plt.ylabel("Mean AUC score")
-plt.ylim(0.4, 1.0)
+plt.ylim(0, 1.0)
 plt.xticks(rotation=45)
 plt.grid(True)
 # sort the AUC scores from highest to lowest
