@@ -1,14 +1,14 @@
-# Imports
-from split_datas import get_pickle_file
+import statistics
+
 import numpy as np
 import pandas as pd
+from sklearn.impute import SimpleImputer
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import roc_auc_score
-from sklearn.impute import SimpleImputer
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
-from sklearn.neighbors import KNeighborsClassifier
-import statistics
+from split_datas import get_pickle_file
 
 
 print("[+] Please wait, this may take a while...")
@@ -43,8 +43,8 @@ for appName in datas:
         label_encoder = LabelEncoder()
         X_train_encoded = X_train.apply(label_encoder.fit_transform)
         y_train_encoded = label_encoder.fit_transform(y_train)
-        X_test_encoded  = X_test.apply(label_encoder.fit_transform)
-        y_test_encoded  = label_encoder.fit_transform(y_test)
+        X_test_encoded = X_test.apply(label_encoder.fit_transform)
+        y_test_encoded = label_encoder.fit_transform(y_test)
 
         # Utilise un imputeur pour remplacer les NaN par la moyenne des colonnes
         imputer = SimpleImputer(strategy='mean')
@@ -52,13 +52,13 @@ for appName in datas:
         X_test_imputed = imputer.transform(X_test_encoded)
 
         # Init KNN
-        knn_model = KNeighborsClassifier(n_neighbors=3)
+        random_forest_classifier = RandomForestClassifier(n_estimators=100)
 
         # Train model
-        knn_model.fit(X_train_imputed, y_train_encoded)
+        random_forest_classifier.fit(X_train_imputed, y_train_encoded)
 
         # Predict using test datas
-        predictions = knn_model.predict(X_test_imputed)
+        predictions = random_forest_classifier.predict(X_test_imputed)
 
         # Calculate accuracy
         accuracy = accuracy_score(y_test_encoded, predictions)
@@ -70,6 +70,7 @@ for appName in datas:
 
         roc_auc = roc_auc_score(y_test_encoded, predictions)
         roc_auc_scores[appName].append(roc_auc)
+
 
 print("\nResults :")
 for appName in accuracy_scores:
