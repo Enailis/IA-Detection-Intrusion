@@ -9,7 +9,7 @@ git clone git@github.com:Enailis/IA-Detection-Intrusion.git
 
 Install dependencies:
 ```
-cd IA-Detection-Intrusion/sous-projet-1
+cd IA-Detection-Intrusion/sub-project-1
 pip install -r requirements.txt
 ```
 
