@@ -56,4 +56,9 @@ sorted_AUC_scores = sorted(AUC_scores.items(), key=lambda x: x[1], reverse=True)
 plt.bar(range(len(AUC_scores)), [val[1] for val in sorted_AUC_scores], align='center')
 # add classifier names as x labels
 plt.xticks(range(len(AUC_scores)), [val[0] for val in sorted_AUC_scores])
+
+# Save the plot in `images/AUC_scores.png`
+plt.savefig("images/AUC_scores.png")
+
+# Plot the graph
 plt.show()
