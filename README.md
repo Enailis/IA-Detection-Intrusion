@@ -1,10 +1,12 @@
 # IA-Detection-Intrusion
 
-The following projects has been realized during the course "IA and intrusion detection" at the ENSIBS.
+The following projects has been realized during the course "AI and intrusion detection" at the ENSIBS.
 
 ## Requirements
 
 Everything you need to run these projects will be detailed in each sub-project.
+
+If you ever need to run this project you will need the `.xml` files that are not included in this repository. You can contact me if you need them.
 
 ## Sub-project 1
 
@@ -15,7 +17,6 @@ More information on how to install and run the project in the [README](./sub-pro
 ### Disclaimer
 
 The first sub-project uses an instance of ELK that is no longer runing on our personnal servers. If you want to run the project, you will have to install ELK on your own.
-If you ever need to run this project you will need the `.xml` files that are not included in this repository. You can contact me if you need them.
 
 ## Sub-project 2
 
