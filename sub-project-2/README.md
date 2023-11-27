@@ -173,7 +173,7 @@ Overall, the results seem diverse. The performances are higher for Random Forest
 generalization on the test data. Naive Bayes models appear to be less effective. However, it's important to consider
 other aspects such as class imbalance, sample size, and possibly adjust hyperparameters to enhance performance
 
-![AUC scores](./images/AUC_scores.png)
+![AUC scores](images/AUC_scores.png)
 
 **Conclusion**:
 

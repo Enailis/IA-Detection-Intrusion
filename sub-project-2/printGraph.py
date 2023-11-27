@@ -42,7 +42,6 @@ for classifier in data.keys():
     AUC_scores[classifier] = np.mean(temp_scores)
 print(AUC_scores)
 
-
 plt.figure(figsize=(10, 11))
 plt.title("Mean AUC scores for each classifier")
 plt.xlabel("Classifier")
