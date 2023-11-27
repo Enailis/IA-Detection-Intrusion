@@ -29,7 +29,7 @@ time *(because of the horrible bandwidth of our school)* we decided to serialize
 You can use the file `split_data.py` to load the data from the `.xml` files and split them depending on appName.
 For each appName category, the data is split into 5 sub dictionaries.
 
-The data is then saved on `dictionnariesByAppNameSplitted.pickle`to avoid having to load the data every time.
+The data is then saved on `dictionnariesByAppNameSplitted.pickle` to avoid having to load the data every time.
 So you only need to create the pickle file once.
 
 This file will be used in following function to load the data.
