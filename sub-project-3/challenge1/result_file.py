@@ -1,4 +1,4 @@
-def create_result_file(predictions, probabilities):
+def create_result_file(predictions, probabilities, METHOD_NAME, APP_NAME, VERSION):
     import json
     res = dict()
 

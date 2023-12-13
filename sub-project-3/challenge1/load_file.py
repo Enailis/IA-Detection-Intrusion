@@ -1,8 +1,7 @@
-def get_dictionnaries():
+def get_dictionnaries(file):
     # Imports
     from lxml import etree as ET
 
-    file = "challenge1_data/benchmark_HTTPWeb_test.xml"
     dictionnaries = []
     # Parse the XML file using lxml
     tree = ET.parse(file)
