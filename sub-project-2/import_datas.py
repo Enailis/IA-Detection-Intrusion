@@ -20,7 +20,6 @@ def get_dictionnaries():
             root = tree.getroot()
 
             # Initialize a list to store flow dictionaries
-            flow_data = []
             flow_elements = root.xpath(
                 "//TestbedMonJun14Flows | //TestbedSatJun12 | //TestbedSunJun13Flows | //TestbedThuJun17-1Flows | //TestbedThuJun17-2Flows | //TestbedTueJun15-1Flows | //TestbedTueJun15-2Flows | //TestbedWedJun16-1Flows | //TestbedWedJun16-2Flows")
             filename = filename.replace('.xml', '').replace('Flows', '').replace('bis', '')
@@ -33,17 +32,7 @@ def get_dictionnaries():
                     else:
                         flow_dict[child_elem.tag] = int(child_elem.text) if child_elem.tag.endswith(
                             ("Bytes", "Packets", "Port")) else child_elem.text
-                flow_data.append(flow_dict)
-
-            # Index the flow data in Elasticsearch with the origin file information
-            for flow in flow_data:
-                flow["origin_file"] = filename
-
-                dictionnaries.append({
-                    '_op_type': 'index',
-                    '_index': "ia-detection-intrusion",
-                    '_source': flow
-                })
+                dictionnaries.append(flow_dict)
 
     return dictionnaries
 
