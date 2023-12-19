@@ -6,6 +6,7 @@ from datetime import datetime
 import numpy as np
 import pandas
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
 
 from import_datas import get_dictionnaries
 
@@ -39,7 +40,7 @@ def split_datas(main_dataframe: pandas.DataFrame):
 
 
 def transform_IP(ip: str):
-    # Transform an IP address into a 32 bits integer
+    # Transform an IP address into a 32-bit integer
     ip = ip.split('.')
     ip = [int(i) for i in ip]
     ip = ip[0] * 256 ** 3 + ip[1] * 256 ** 2 + ip[2] * 256 + ip[3]
@@ -78,6 +79,11 @@ def transform_payload(payload: str):
     hash_object = hashlib.sha256(decoded_bytes)
     # Convert hash to int
     integer_representation = int(hash_object.hexdigest(), 16)
+
+    # Normalize the integer representation
+    scaler = MinMaxScaler()
+    normalized_representation = scaler.fit_transform([[integer_representation]])[0][0]
+
     return integer_representation
 
 

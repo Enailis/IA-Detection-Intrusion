@@ -33,17 +33,18 @@ for appName in datas:
         train = pd.concat(copy)
 
         # Split train dataframe into X_train and y_train with y_train being the "Tag"
-        X_train = train.drop(columns=["Tag", "appName"], axis=1)
+        X_train = train.drop(columns=["Tag", "appName", "sourcePayloadAsBase64", "destinationPayloadAsBase64"], axis=1)
         y_train = train["Tag"]
 
-        # Split concatenated_df into X_train (just drop the Tag column)
-        X_test = test.drop(columns=["Tag", "appName"], axis=1)
+        # Split concatenated_df into X_train (drop the Tag column)
+        X_test = test.drop(columns=["Tag", "appName", "sourcePayloadAsBase64", "destinationPayloadAsBase64"], axis=1)
         y_test = test["Tag"]
 
         # Init KNN
         knn_model = KNeighborsClassifier(n_neighbors=3)
 
         # Train model
+        print(f' ╰─ Training model...    {i + 1}/{len(datas[appName])}')
         knn_model.fit(X_train, y_train)
 
         # Predict using test datas
@@ -74,9 +75,9 @@ for appName in datas:
         plt.ylim([0.0, 1.05])
         plt.xlabel('False Positive Rate')
         plt.ylabel('True Positive Rate')
-        plt.title('Receiver Operating Characteristic')
+        plt.title('ROC curve for ' + appName + ' (fold ' + str(i) + ')')
         plt.legend(loc="lower right")
-        plt.savefig("ROC_" + appName + "_" + str(i) + ".png")
+        plt.savefig("ROC_images/KNN/ROC_" + appName + "_" + str(i) + ".png")
 
 print("\nResults :")
 for appName in accuracy_scores:
