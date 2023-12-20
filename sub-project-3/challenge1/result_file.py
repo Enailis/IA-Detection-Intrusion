@@ -1,14 +1,17 @@
-def create_result_file(predictions, probabilities, METHOD_NAME, APP_NAME, VERSION):
+def create_result_file(predictions, probabilities, method_name: str, app_name: str, version: str):
     import json
     res = dict()
+
+    predictions = ["Normal" if x == 0 else "Attack" for x in predictions]
+    probabilities = [[x, 1- x] for x in probabilities]
 
     res['preds'] = list(predictions)  # list of predicted labels
     res['probs'] = list(probabilities)  # list of probas/scores (probas of attack (class 1))
 
-    res['names'] = ['NAME1', 'NAME2']  # list of team member name(s )
-    res['method'] = METHOD_NAME  # methode name
-    res['appName'] = APP_NAME  # "SSH" ou "HTTPWeb"
-    res['version'] = VERSION  # submission version number
-    f = open("<NAME1>_<NAMES2>_<APP_NAME>_<VERSION>" + ".res", "w")  # VERSION = 1, 2 ou 3
+    res['names'] = ['HARDY', 'LUCAS']  # list of team member name(s )
+    res['method'] = method_name  # methode name
+    res['appName'] = app_name  # "SSH" ou "HTTPWeb"
+    res['version'] = version  # submission version number
+    f = open(f'results/HARDY_LUCAS_{app_name}_{version}.res', "w")  # VERSION = 1, 2 ou 3
     f.write(json.dumps(res))
     f.close()
