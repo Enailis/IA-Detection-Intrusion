@@ -2,13 +2,14 @@ from matplotlib import pyplot as plt
 
 
 def plot_result(predictions, name: str, title: str):
-    # Plot the pie chart of Attack vs Normal
     print("[+] Plotting the pie chart of Attack vs Normal")
 
-    labels = 'Normal', 'Attack'
-    sizes = [list(predictions).count(0), list(predictions).count(1)]
-    print(f'Normal : {list(predictions).count(0)}')
-    print(f'Attack : {list(predictions).count(1)}')
+    normal_count = list(predictions).count(0)
+    attack_count = list(predictions).count(1)
+    labels = f'Normal: {normal_count}', f'Attack: {attack_count}'
+    sizes = [normal_count, attack_count]
+    print(f'Normal : {normal_count}')
+    print(f'Attack : {attack_count}')
     explode = (0, 0.1)
 
     fig1, ax1 = plt.subplots()
