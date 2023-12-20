@@ -3,11 +3,13 @@
 ## Installation
 
 Clone project:
+
 ```
 git clone git@github.com:Enailis/IA-Detection-Intrusion.git
 ```
 
 Install dependencies:
+
 ```
 cd IA-Detection-Intrusion/sub-project-1
 pip install -r requirements.txt
@@ -19,12 +21,15 @@ Create a folder called `TRAIN_ENSIBS` and put every `.xml` files required for th
 
 You can now execute every python while by using the command `python3 <file.py>`.
 
-## Disclamer
+## Disclaimer
 
-The file `import_data.py` must not be launched. It is used to import data from `.xml` files to ElasticSearch but this step has already been done.
+The file `import_data.py` must not be launched.
+It is used to import data from `.xml` files to ElasticSearch but this step has already been done.
 
-## Explaination
+## Explanation
 
 ### [`import_data.py`](./import_datas.py)
 
-This file is used to import data from `.xml` files to ElasticSearch. The function `get_dictionnaries` uses `lxml` lib to extract information from the `.xml` files to put them in a dictionnary before importing it to ElasticSearch.
+This file is used to import data from `.xml` files to ElasticSearch.
+The function `get_dictionnaries` uses `lxml` lib to extract information from the `.xml` files to put them in a
+dictionary before importing it to ElasticSearch.

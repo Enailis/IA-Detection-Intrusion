@@ -19,74 +19,78 @@ Create a folder called `TRAIN_ENSIBS` and put every `.xml` files required for th
 
 You can now execute every python while by using the command `python3 <file.py>`.
 
-## Disclamer
+## Disclaimer
 
-This projet is suppose to get the datas pushed to ELK in [sub-project-1](../sub-project-1/README.md) but to gain some
-time *(because of the horrible bandwidth of our school)* we decided to serialize the datas in a pickle file.
+This project is supposed to get the data pushed to ELK in [sub-project-1](../sub-project-1/README.md) but to gain some
+time *(because of the horrible bandwidth of our school)* we decided to serialize the data in a pickle file.
 
 ## First data loading
 
 You can use the file `split_data.py` to load the data from the `.xml` files and split them depending on appName.
-For each appName category, the data is split into 5 sub dictionaries.
+For each appName category, the data is split into five sub dictionaries.
 
 The data is then saved on `dictionnariesByAppNameSplitted.pickle` to avoid having to load the data every time.
 So you only need to create the pickle file once.
 
-This file will be used in following function to load the data.
+This file will be used in the following function to load the data.
 
 ## Models training
 
 ### KNN
 
 You can use the file `knn.py` to train the KNN model on the data.
-The model is train on one of the 5 sub dictionaries of the data. The 4 others are used to test the model.
+The model is trained on one of the five sub dictionaries of the data.
+The four others are used to test the model.
 
-The model is using 3 neighbors. That means that the model will look at the 3 closest neighbors to determine the
-category of the data.
+The model is using three neighbors.
+That means that the model will look at the three closest neighbors to determine the category of the data.
 
 ### Naive Bayes
 
 You can use the file `NaiveBayes.py` to train the Naive Bayes model on the data.
-The model is train on one of the 5 sub dictionaries of the data. The 4 others are used to test the model.
+The model is trained on one of the five sub dictionaries of the data.
+The four others are used to test the model.
 
 ### Random Forest
 
 You can use the file `RandomForest.py` to train the Random Forest model on the data.
-The model is train on one of the 5 sub dictionaries of the data. The 4 others are used to test the model.
+The model is trained on one of the five sub dictionaries of the data.
+The four others are used to test the model.
 
 The model is using 100 trees.
 
 ### Multilayer Perceptron classification
 
 You can use the file `MultilayerPerceptron.py` to train the Multilayer Perceptron classification model on the data.
-The model is train on one of the 5 sub dictionaries of the data. The 4 others are used to test the model.
+The model is trained on one of the five sub dictionaries of the data.
+The four others are used to test the model.
 
 ## Data processing
 
 ### KNN
 
 ```plaintext
-Accuracy scores :
+Results :
 [+] HTTPWeb
- ╰─ Mean : 98.93600399415638
- ╰─ Median : 98.9570130424754
- ╰─ Mean Precision : 0.497512398499892
- ╰─ Mean ROC AUC : 0.497932444876514
+ ╰─ Mean Accuracy: 99.83410889052463
+ ╰─ Median Accuracy : 99.83191588486238
+ ╰─ Mean Precision : 0.9323719879324288
+ ╰─ Mean ROC AUC : 0.922938276369142
 [+] SSH
- ╰─ Mean : 64.09715573286715
- ╰─ Median : 64.62549954879464
- ╰─ Mean Precision : 0.5722680190618965
- ╰─ Mean ROC AUC : 0.5829875879836963
+ ╰─ Mean Accuracy: 99.98968540484786
+ ╰─ Median Accuracy : 100.0
+ ╰─ Mean Precision : 0.9998087954110899
+ ╰─ Mean ROC AUC : 0.9999294283697953
 [+] SMTP
- ╰─ Mean : 98.86316420445621
- ╰─ Median : 98.83902269970542
- ╰─ Mean Precision : 0.494796009010065
- ╰─ Mean ROC AUC : 0.4995096749777563
+ ╰─ Mean Accuracy: 99.91680147019953
+ ╰─ Median Accuracy : 99.93069993069993
+ ╰─ Mean Precision : 0.9854343185616259
+ ╰─ Mean ROC AUC : 0.9695434652892482
 [+] FTP
- ╰─ Mean : 97.13023992874685
- ╰─ Median : 97.11938546890003
- ╰─ Mean Precision : 0.579660677009638
- ╰─ Mean ROC AUC : 0.6693818115293796
+ ╰─ Mean Accuracy: 99.77809144660078
+ ╰─ Median Accuracy : 99.82935153583618
+ ╰─ Mean Precision : 0.9692681411015588
+ ╰─ Mean ROC AUC : 0.9723742178026145
 ```
 
 ### Naive Bayes
@@ -94,25 +98,25 @@ Accuracy scores :
 ```plaintext
 Results :
 [+] HTTPWeb
- ╰─ Mean Accuracy: 99.41664063165945
- ╰─ Median Accuracy : 99.416047392196
- ╰─ Mean Precision : 0.49708320315829724
- ╰─ Mean ROC AUC : 0.5
+ ╰─ Mean Accuracy: 98.39389110563346
+ ╰─ Median Accuracy : 98.67907809516849
+ ╰─ Mean Precision : 0.5404557374966396
+ ╰─ Mean ROC AUC : 0.5533703016315652
 [+] SSH
- ╰─ Mean Accuracy: 26.544304651042758
- ╰─ Median Accuracy : 26.4535258476215
- ╰─ Mean Precision : 0.13272152325521383
- ╰─ Mean ROC AUC : 0.5
+ ╰─ Mean Accuracy: 75.16756432000766
+ ╰─ Median Accuracy : 75.0
+ ╰─ Mean Precision : 0.8736756701734437
+ ╰─ Mean ROC AUC : 0.5322518895493253
 [+] SMTP
- ╰─ Mean Accuracy: 98.96021072313098
- ╰─ Median Accuracy : 98.9428076256499
- ╰─ Mean Precision : 0.49480105361565496
- ╰─ Mean ROC AUC : 0.5
+ ╰─ Mean Accuracy: 97.69866099963187
+ ╰─ Median Accuracy : 97.57449757449757
+ ╰─ Mean Precision : 0.656003301540719
+ ╰─ Mean ROC AUC : 0.9807490057894134
 [+] FTP
- ╰─ Mean Accuracy: 98.07117853302196
- ╰─ Median Accuracy : 98.06892136989225
- ╰─ Mean Precision : 0.4903558926651098
- ╰─ Mean ROC AUC : 0.5
+ ╰─ Mean Accuracy: 85.35459265053554
+ ╰─ Median Accuracy : 85.31796841655996
+ ╰─ Mean Precision : 0.5586705979412233
+ ╰─ Mean ROC AUC : 0.9253365791167967
 ```
 
 ### Random Forest
@@ -120,25 +124,25 @@ Results :
 ```plaintext
 Results :
 [+] HTTPWeb
- ╰─ Mean Accuracy: 99.3865865862443
- ╰─ Median Accuracy : 99.40211520586831
- ╰─ Mean Precision : 0.49982340311876444
- ╰─ Mean ROC AUC : 0.5000794844564099
+ ╰─ Mean Accuracy: 99.99744221326846
+ ╰─ Median Accuracy : 99.9981729987485
+ ╰─ Mean Precision : 0.9995135659942382
+ ╰─ Mean ROC AUC : 0.9982904236198072
 [+] SSH
- ╰─ Mean Accuracy: 98.46333541413235
- ╰─ Median Accuracy : 99.81954111884507
- ╰─ Mean Precision : 0.989730836268744
- ╰─ Mean ROC AUC : 0.9722444199826665
+ ╰─ Mean Accuracy: 99.98968540484786
+ ╰─ Median Accuracy : 100.0
+ ╰─ Mean Precision : 0.9999301675977653
+ ╰─ Mean ROC AUC : 0.9998031496062992
 [+] SMTP
- ╰─ Mean Accuracy: 99.67073760003026
- ╰─ Median Accuracy : 99.63604852686309
- ╰─ Mean Precision : 0.9873358805098771
- ╰─ Mean ROC AUC : 0.8554693348473735
+ ╰─ Mean Accuracy: 99.97226074895977
+ ╰─ Median Accuracy : 100.0
+ ╰─ Mean Precision : 0.9998598452109688
+ ╰─ Mean ROC AUC : 0.9870445344129555
 [+] FTP
- ╰─ Mean Accuracy: 99.89331990568627
- ╰─ Median Accuracy : 99.91465756347344
- ╰─ Mean Precision : 0.9895174575111664
- ╰─ Mean ROC AUC : 0.9820131190167954
+ ╰─ Mean Accuracy: 100.0
+ ╰─ Median Accuracy : 100.0
+ ╰─ Mean Precision : 1.0
+ ╰─ Mean ROC AUC : 1.0
 ```
 
 ### Multilayer Perceptron classification
@@ -146,40 +150,42 @@ Results :
 ```plaintext
 Results :
 [+] HTTPWeb
- ╰─ Mean Accuracy: 99.4155901107381
- ╰─ Median Accuracy : 99.416047392196
- ╰─ Mean Precision : 0.49708317296381316
- ╰─ Mean ROC AUC : 0.4999947170279377
+ ╰─ Mean Accuracy: 99.41664066669647
+ ╰─ Median Accuracy : 99.41262446332328
+ ╰─ Mean Precision : 0.4970832033334823
+ ╰─ Mean ROC AUC : 0.5
 [+] SSH
- ╰─ Mean Accuracy: 94.11406135243028
- ╰─ Median Accuracy : 96.0041247744264
- ╰─ Mean Precision : 0.9456602456887089
- ╰─ Mean ROC AUC : 0.9065492485365457
+ ╰─ Mean Accuracy: 92.39975968056656
+ ╰─ Median Accuracy : 92.37113402061856
+ ╰─ Mean Precision : 0.9496766445957265
+ ╰─ Mean ROC AUC : 0.8588010369325156
 [+] SMTP
- ╰─ Mean Accuracy: 95.03301483212392
- ╰─ Median Accuracy : 97.157712305026
- ╰─ Mean Precision : 0.5654041466829387
- ╰─ Mean ROC AUC : 0.612705936370572
+ ╰─ Mean Accuracy: 98.96019138737587
+ ╰─ Median Accuracy : 98.8911988911989
+ ╰─ Mean Precision : 0.4948009569368793
+ ╰─ Mean ROC AUC : 0.5
 [+] FTP
- ╰─ Mean Accuracy: 98.22906135771093
- ╰─ Median Accuracy : 98.14360396884668
- ╰─ Mean Precision : 0.7148723512698955
- ╰─ Mean ROC AUC : 0.6099666125328862
+ ╰─ Mean Accuracy: 98.1394728907107
+ ╰─ Median Accuracy : 98.12286689419795
+ ╰─ Mean Precision : 0.6722472823958696
+ ╰─ Mean ROC AUC : 0.5427075049301581
 ```
 
 ## Model comparison
 
-Overall, the results seem diverse. The performances are higher for Random Forest models, indicating a good
-generalization on the test data. Naive Bayes models appear to be less effective. However, it's important to consider
-other aspects such as class imbalance, sample size, and possibly adjust hyperparameters to enhance performance
+Overall, the results seem diverse.
+The performances are higher for Random Forest models, indicating a good generalization on the test data.
+Naive Bayes models appear to be less effective.
+However, it's important to consider other aspects such as class imbalance, sample size, and possibly adjust
+hyperparameters to enhance performance
 
 ![AUC scores](images/AUC_scores.png)
 
 **Conclusion**:
 
 - Random Forest appears to be the most stable and effective choice among the tested models, with high performance across
-most categories.
+  most categories.
 - Naive Bayes seems less effective in this configuration.
 - KNN exhibits variable performance across
-categories.
+  categories.
 - Multilayer Perceptron shows competitive performance but with some variability
