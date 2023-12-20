@@ -38,7 +38,7 @@ predictions = knn_model.predict(X_test)
 
 # Plot the pie chart of Attack vs Normal
 plot_result(predictions, "plot_images/KNN_SSH_Pie.png",
-            "Attack vs Normal SSH prediction with Random Forest classifier")
+            "Attack vs Normal SSH prediction with KNN")
 
 # Create result file
 print("[+] Creating result file")
