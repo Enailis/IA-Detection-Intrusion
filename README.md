@@ -23,3 +23,8 @@ The first sub-project uses an instance of ELK that is no longer runing on our pe
 The goal of this project is to use the dataset we extracted in the sub-project 1 and to create a machine learning model to detect intrusion.
 
 More information on how to install and run the project in the [README](./sub-project-2/README.md) of the sub-project 2.
+
+## Sub-project 3
+
+The goal of this project is to solve two challenges.
+The two challenges are described in this [README](./sub-project-3/README.md) of the sub-project 3.
