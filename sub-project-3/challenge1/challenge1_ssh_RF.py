@@ -1,20 +1,20 @@
 # Imports
 
-import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 
+from plot_result import plot_result
 from result_file import create_result_file
 from split_datas import get_pickle_file
 
 print("[+] Please wait, this may take a while...")
 
 train = get_pickle_file("train")
-test = get_pickle_file("test_http")
+test = get_pickle_file("test_ssh")
 
 # Switch to dataframe
-train = pd.DataFrame(train["HTTPWeb"])
-test = pd.DataFrame(test["HTTPWeb"])
+train = pd.DataFrame(train["SSH"])
+test = pd.DataFrame(test["SSH"])
 
 # Split train dataframe into X_train and y_train with y_train being the "Tag"
 X_train = train.drop(
@@ -37,22 +37,10 @@ print("[+] Predicting using test datas")
 predictions = random_forest_classifier.predict(X_test)
 
 # Plot the pie chart of Attack vs Normal
-print("[+] Plotting the pie chart of Attack vs Normal")
-
-labels = 'Normal', 'Attack'
-sizes = [list(predictions).count(0), list(predictions).count(1)]
-print(f'Normal : {list(predictions).count(0)}')
-print(f'Attack : {list(predictions).count(1)}')
-explode = (0, 0.1)
-
-fig1, ax1 = plt.subplots()
-ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
-        shadow=True, startangle=90)
-ax1.axis('equal')
-plt.title("Attack vs Normal HTTPWeb prediction with Random Forest classifier")
-plt.savefig("plot_images/RandomForest_HTTPWeb_Pie.png")
+plot_result(predictions, "plot_images/RandomForest_SSH_Pie.png",
+            "Attack vs Normal SSH prediction with Random Forest classifier")
 
 # Create result file
 print("[+] Creating result file")
 
-create_result_file(predictions, random_forest_classifier.predict_proba(X_test)[:, 1], "RandomForest", "HTTPWeb", "1")
+create_result_file(predictions, random_forest_classifier.predict_proba(X_test)[:, 1], "RandomForest", "SSH", "1")

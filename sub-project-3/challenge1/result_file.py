@@ -12,6 +12,6 @@ def create_result_file(predictions, probabilities, method_name: str, app_name: s
     res['method'] = method_name  # methode name
     res['appName'] = app_name  # "SSH" ou "HTTPWeb"
     res['version'] = version  # submission version number
-    f = open(f'results/HARDY_LUCAS_{app_name}_{version}.res', "w")  # VERSION = 1, 2 ou 3
+    f = open(f'results/HARDY_LUCAS_{method_name}_{app_name}_{version}.res', "w")  # VERSION = 1, 2 ou 3
     f.write(json.dumps(res))
     f.close()
