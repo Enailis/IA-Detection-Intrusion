@@ -40,9 +40,9 @@ predictions = random_forest_classifier.predict(X_test)
 print("[+] Plotting the pie chart of Attack vs Normal")
 
 labels = 'Normal', 'Attack'
-sizes = [list(y_train).count(0), list(y_train).count(1)]
-print(f'Normal : {list(y_train).count(0)}')
-print(f'Attack : {list(y_train).count(1)}')
+sizes = [list(predictions).count(0), list(predictions).count(1)]
+print(f'Normal : {list(predictions).count(0)}')
+print(f'Attack : {list(predictions).count(1)}')
 explode = (0, 0.1)
 
 fig1, ax1 = plt.subplots()
