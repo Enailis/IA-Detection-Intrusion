@@ -1,6 +1,57 @@
+# Summary
+
+---
+
+<!-- TOC -->
+
+* [Summary](#summary)
+* [Abstract](#abstract)
+    * [Data Processing:](#data-processing)
+    * [AI Models and Attack Detection:](#ai-models-and-attack-detection)
+* [Introduction](#introduction)
+* [Project structure](#project-structure)
+    * [Subproject 1: Data processing](#subproject-1-data-processing)
+        * [Load data](#load-data)
+        * [Design an API](#design-an-api)
+        * [Data visualization](#data-visualization)
+    * [Subproject 2: IA models and attack detection](#subproject-2-ia-models-and-attack-detection)
+        * [Preparing the classification tasks](#preparing-the-classification-tasks)
+        * [Classification Models](#classification-models)
+* [Model evaluation and comparison](#model-evaluation-and-comparison)
+    * [KNN](#knn)
+    * [Naive Bayes](#naive-bayes)
+    * [Random Forest](#random-forest)
+    * [MLP](#mlp)
+    * [Global](#global)
+        * [Conclusion](#conclusion)
+* [Appendix 1: User's Manual](#appendix-1-users-manual)
+* [Appendix 2: Licensed code](#appendix-2-licensed-code)
+
+<!-- TOC -->
+
+---
+
 # Abstract
 
-**TODO !**
+This project aims to deepen the understanding of AI-based attack detection.
+It is primarily divided into two distinct parts:
+
+## Data Processing:
+
+This first part highlights the importance of a quality dataset and explains how to process it effectively.
+The use of ElasticSearch for data storage and processing is detailed, along with exploration of ElasticSearch queries to
+extract the necessary data.
+
+## AI Models and Attack Detection:
+
+The second part focuses on training and using artificial intelligence models to detect attacks.
+Different models, such as K-Nearest Neighbors, Naive Bayes, Random Forest, and Multi-layer Perceptron, are presented.
+The importance of model selection and data preparation is discussed in detail.
+
+The project concludes with a comparative evaluation of the models, emphasizing the effectiveness of the Random Forest
+model for attack detection.
+This in-depth understanding of data processing and the use of AI models provides valuable insights for the project's
+future phases.
 
 # Introduction
 
@@ -48,10 +99,13 @@ es = Elasticsearch("https://tdelastic:9200", verify_certs=False, request_timeout
                    basic_auth=(LOGIN, PASSWORD))
 ```
 
+> _Note:_ Login and password are provided in `.env` file, that is not pushed on the repository (for security reasons
+> obviously).
+
 After that, we are able to discuss with the database.
 
-To talk a bit about the data them self, we use multiple `.xml` file that have been generated (from the packet files (
-pcap)) using IBM QRadar appliance.
+To talk a bit about the data them self, we use multiple `.xml` file that have been generated (from the packet files
+pcap) using IBM QRadar appliance.
 These files are composed of multiple flows, each one corresponding to a network connection.
 These flows are related to different protocols, and have different attributes.
 To give an example, a flow looks like this :
@@ -479,4 +533,8 @@ This knowledge base will be beneficial for the continuation of the project and t
 
 # Appendix 1: User's Manual
 
+For more information about the project, please refer to all README.md files next to the files you want to use.
+
 # Appendix 2: Licensed code
+
+No licensed code has been used in this project. All the code has been written by us.
