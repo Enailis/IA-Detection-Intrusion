@@ -1,30 +1,27 @@
 import pickle
-from lxml import etree as ET
+
+import pandas as pd
+from bigxml import Parser
+
+from Flow import Flow
+from transformation import transform_flow
 
 
 def load_file(file):
-    flows = []
-    context = ET.iterparse(file, events=("end",), tag=("FFlow"))
-    
-    for _, elem in context:
-        flow_dict = {}
-        for child_elem in elem.getchildren():
-            if child_elem.tag in ["Timestamp", "Duration", "Src_Pt", "Dst_Pt", "Packets", "Flows", "Tos"]:
-                flow_dict[child_elem.tag] = int(float(child_elem.text.replace(' ', '')))
-            elif child_elem.tag == "Bytes":
-                value = child_elem.text.replace(' ', '')
-                convertion = {("M", '000000'), ("K", '000'), ("G", '000000000')}
-                for k, v in convertion:
-                    if k in value:
-                        value = value.replace(k, v).replace('.', '')
-                flow_dict[child_elem.tag] = int(float(value))
-            else:
-                flow_dict[child_elem.tag] = child_elem.text
-        flows.append(flow_dict)
+    flow_list = []
 
-    # Transform flow list into pandas dataframe
-    import pandas as pd
-    df = pd.DataFrame(flows)
+    with open(file, 'rb') as f:
+        print("Parsing file")
+        for item in Parser(f).iter_from(Flow):
+            # Process item
+            transformed_item = transform_flow(item)
+
+            # Add item to list
+            flow_list.append(transformed_item)
+    f.close()
+
+    # Convert list to dataframe
+    df = pd.DataFrame(flow_list)
 
     return df
 
@@ -67,7 +64,7 @@ if __name__ == "__main__":
     test = load_file("data/traffic_os_TEST.xml")
     print("[+] Testing datas:")
     print(test.head())
-    
+
     print("\n[~] Exporting datas to pickle files...")
     export_pickle(train, test)
     train_pickle, test_pickle = load_pickle()
